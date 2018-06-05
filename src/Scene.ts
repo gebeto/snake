@@ -3,23 +3,16 @@ import { Drawable } from './interfaces';
 
 
 export class Scene {
-	private static instance: Scene;
-
 	private canvas: HTMLCanvasElement;
 	private ctx: CanvasRenderingContext2D;
 
 	private layers: Array<Drawable>;
+	private animationLoop: AnimationLoop;
 
-	private prevTime: number;
-	private dropCounter: number;
-	private dropInterval: number;
-
-	private constructor() {
+	constructor() {
 		this.layers = [];
-		
-		this.prevTime = 0;
-		this.dropCounter = 0;
-		this.dropInterval = 1000;
+		this.animationLoop = AnimationLoop.getInstance();
+		this.animationLoop.appendAction(this.draw.bind(this));
 
 		this.canvas = document.createElement("canvas");
 		this.ctx = <CanvasRenderingContext2D>this.canvas.getContext("2d");
@@ -37,25 +30,47 @@ export class Scene {
 		(window as any).CTX = this.ctx;
 	}
 
-	public static getInstance() {
-		if (!this.instance) {
-			this.instance = new Scene();
-		}
-
-		return this.instance;
+	append(drawable: Drawable) {
+		this.layers.push(drawable);
 	}
 
-	loop(time = 0) {
+	draw(time: number) {
 		this.ctx.clearRect(0, 0, CONFIG.WIDTH, CONFIG.HEIGHT);
 
 		this.layers.forEach(drawable => {
 			drawable.draw(this.ctx, time);
 		});
-	
+	}
+}
+
+
+export class AnimationLoop {
+	private static instance: AnimationLoop;
+
+	private actions: Array<(time: number) => void>;
+
+	private constructor() {
+		this.actions = [];
+	}
+
+	public static getInstance() {
+		if (!this.instance) {
+			this.instance = new AnimationLoop();
+			this.instance.loop();
+		}
+
+		return this.instance;
+	}
+
+	appendAction(action: (time: number) => void) {
+		this.actions.push(action);
+	}
+
+	loop(time = 0) {
+		this.actions.forEach(action => {
+			action(time);
+		});
 		requestAnimationFrame(this.loop.bind(this));
 	}
 
-	append(drawable: Drawable) {
-		this.layers.push(drawable);
-	}
 }

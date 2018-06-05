@@ -2,21 +2,25 @@ export class Matrix {
 	width: number;
 	height: number;
 
-	grid: Array<Array<number>>;
+	grid: number[][];
 
-	constructor(width: number, height: number) {
+	constructor(width: number, height: number, fill?: number[][]) {
 		this.width = width;
 		this.height = height;
 
 		this.grid = [];
-		this.fillGrid();
+		this.fillGrid(fill);
 	}
 
-	fillGrid() {
+	fillGrid(fill?: number[][]) {
 		for (let y = 0; y < this.height; y++) {
-			const row = new Array(this.width);
-			row.fill(0);
-			this.grid.push(row);
+			let row = new Array(this.width);
+			if (fill) {
+				this.grid.push(fill[y]);
+			} else {
+				row.fill(0);
+				this.grid.push(row);
+			}
 		}
 	}
 

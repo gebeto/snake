@@ -1,18 +1,16 @@
 import * as CONFIG from '../../config';
 import { AbstractShape } from './Shapes/AbstractShape';
 import { Matrix } from '../../Matrix';
+import { Colors } from '../../Colors';
 
-const colors = [
-	null,
-	"red",
-	"pink",
-	"blue",
-];
 
 export class Area {
 	matrix: Matrix;
+	colors: Colors;
 
 	constructor() {
+		this.colors = Colors.getInstance();
+
 		this.matrix = new Matrix(CONFIG.WIDTH, CONFIG.HEIGHT);
 		this.matrix.grid.push(new Array(CONFIG.WIDTH));
 		this.matrix.grid[this.matrix.grid.length - 1].fill(1);
@@ -22,7 +20,7 @@ export class Area {
 		this.matrix.grid.forEach((row, rowIndex) => {
 			row.forEach((item, itemIndex) => {
 				if (item) {
-					ctx.fillStyle = <string>colors[item];
+					ctx.fillStyle = this.colors.getColor(item);
 					ctx.fillRect(itemIndex, rowIndex, 1, 1);
 				}
 			});

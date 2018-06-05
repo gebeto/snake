@@ -6,11 +6,9 @@ import { Manipulator } from './Manipulator';
 
 
 document.addEventListener("DOMContentLoaded", () => {
-	const scene = Scene.getInstance();
+	const scene = new Scene();
+	const game = new GamePlay();
 	const manipulator = Manipulator.getInstance();
 
-	const game = new GamePlay();
-
 	scene.append(game);
-	scene.loop();
 });

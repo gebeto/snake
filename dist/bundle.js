@@ -1,1 +1,257 @@
-!function(t){var e={};function r(n){if(e[n])return e[n].exports;var i=e[n]={i:n,l:!1,exports:{}};return t[n].call(i.exports,i,i.exports,r),i.l=!0,i.exports}r.m=t,r.c=e,r.d=function(t,e,n){r.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:n})},r.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},r.t=function(t,e){if(1&e&&(t=r(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var i in t)r.d(n,i,function(e){return t[e]}.bind(null,i));return n},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="",r(r.s=12)}([function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=function(){function t(){var t=this;this.handlers={},document.addEventListener("keydown",function(e){65===e.keyCode?t.dispatchEvent("left",1):68===e.keyCode?t.dispatchEvent("right",1):87===e.keyCode?t.dispatchEvent("up",1):83===e.keyCode?t.dispatchEvent("down",1):81===e.keyCode?t.dispatchEvent("rotate",-1):69===e.keyCode&&t.dispatchEvent("rotate",1)})}return t.getInstance=function(){return this.instance||(this.instance=new t),this.instance},t.prototype.addEventListener=function(t,e){this.handlers[t]||(this.handlers[t]=[]),this.handlers[t].push(e)},t.prototype.dispatchEvent=function(t,e){console.log(t,e),this.handlers[t]&&this.handlers[t].forEach(function(t){return t(e)})},t}();e.Manipulator=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=r(2),i=function(){function t(t,e,r,i,o){this.color=t,this.x=e,this.y=r,this.matrix=new n.Matrix(i,o)}return t.prototype.draw=function(t){var e=this;this.matrix.grid.forEach(function(r,n){r.forEach(function(r,i){r&&t.fillRect(e.x+i,e.y+n,1,1)})})},t.prototype.set=function(t){var e=this;this.matrix.grid=t,t.forEach(function(t){t.forEach(function(t,r,n){n[r]&&(n[r]=e.color)})})},t}();e.AbstractShape=i},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=function(){function t(t,e){this.width=t,this.height=e,this.grid=[],this.fillGrid()}return t.prototype.fillGrid=function(){for(var t=0;t<this.height;t++){var e=new Array(this.width);e.fill(0),this.grid.push(e)}},t.prototype.coalesced=function(t,e,r){for(var n=0;n<t.grid.length;n++)for(var i=0;i<t.grid[n].length;i++)if(t.grid[n][i]&&this.grid[r+n][e+i])return!0;return!1},t.prototype.merge=function(t,e,r){for(var n=0;n<t.grid.length;n++)for(var i=0;i<t.grid[n].length;i++)t.grid[n][i]&&(this.grid[r+n][e+i]=t.grid[n][i])},t.prototype.rotate=function(t){for(var e,r=0;r<this.grid.length;r++)for(var n=0;n<r;n++)e=[this.grid[r][n],this.grid[n][r]],this.grid[n][r]=e[0],this.grid[r][n]=e[1];t>0?this.grid.forEach(function(t){return t.reverse()}):this.grid.reverse()},t}();e.Matrix=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.WIDTH=12,e.HEIGHT=20,e.PIXEL_SIZE=20,e.BACKGROUND_COLOR="#000000",e.SHAPE_COLOR="#FF00FF"},function(t,e,r){"use strict";var n=this&&this.__importStar||function(t){if(t&&t.__esModule)return t;var e={};if(null!=t)for(var r in t)Object.hasOwnProperty.call(t,r)&&(e[r]=t[r]);return e.default=t,e};Object.defineProperty(e,"__esModule",{value:!0});var i=n(r(3)),o=function(){function t(){this.layers=[],this.prevTime=0,this.dropCounter=0,this.dropInterval=1e3,this.canvas=document.createElement("canvas"),this.ctx=this.canvas.getContext("2d"),document.body.appendChild(this.canvas),this.canvas.width=i.WIDTH*i.PIXEL_SIZE,this.canvas.height=i.HEIGHT*i.PIXEL_SIZE,this.canvas.style.backgroundColor=i.BACKGROUND_COLOR,this.canvas.style.height=i.HEIGHT*i.PIXEL_SIZE+"px",this.canvas.style.width=i.WIDTH*i.PIXEL_SIZE+"px",this.ctx.scale(i.PIXEL_SIZE,i.PIXEL_SIZE),this.ctx.fillStyle=i.SHAPE_COLOR,window.CTX=this.ctx}return t.getInstance=function(){return this.instance||(this.instance=new t),this.instance},t.prototype.loop=function(t){var e=this;void 0===t&&(t=0),this.ctx.clearRect(0,0,i.WIDTH,i.HEIGHT),this.layers.forEach(function(r){r.draw(e.ctx,t)}),requestAnimationFrame(this.loop.bind(this))},t.prototype.append=function(t){this.layers.push(t)},t}();e.Scene=o},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=function(){function t(){}return t.prototype.draw=function(t){t.fillRect(0,0,100,100)},t}();e.GameMenu=n},function(t,e,r){"use strict";var n,i=this&&this.__extends||(n=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var r in e)e.hasOwnProperty(r)&&(t[r]=e[r])},function(t,e){function r(){this.constructor=t}n(t,e),t.prototype=null===e?Object.create(e):(r.prototype=e.prototype,new r)});Object.defineProperty(e,"__esModule",{value:!0});var o=function(t){function e(e){var r=t.call(this,e,0,0,2,2)||this;return r.set([[1,1],[1,1]]),r}return i(e,t),e}(r(1).AbstractShape);e.OShape=o},function(t,e,r){"use strict";var n,i=this&&this.__extends||(n=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var r in e)e.hasOwnProperty(r)&&(t[r]=e[r])},function(t,e){function r(){this.constructor=t}n(t,e),t.prototype=null===e?Object.create(e):(r.prototype=e.prototype,new r)});Object.defineProperty(e,"__esModule",{value:!0});var o=function(t){function e(e){var r=t.call(this,e,0,0,3,3)||this;return r.set([[1,1,1],[0,1,0],[0,0,0]]),r}return i(e,t),e}(r(1).AbstractShape);e.TShape=o},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=r(7),i=r(6),o=function(){function t(){}return t.prototype.createRandomShape=function(){var t=[this.createTShape,this.createOShape];return(0,t[Math.random()*t.length|0])()},t.prototype.createOShape=function(){return new i.OShape(1)},t.prototype.createTShape=function(){return new n.TShape(2)},t}();e.ShapeFactory=o},function(t,e,r){"use strict";var n=this&&this.__importStar||function(t){if(t&&t.__esModule)return t;var e={};if(null!=t)for(var r in t)Object.hasOwnProperty.call(t,r)&&(e[r]=t[r]);return e.default=t,e};Object.defineProperty(e,"__esModule",{value:!0});var i=n(r(3)),o=r(2),a=[null,"red","pink","blue"],c=function(){function t(){this.matrix=new o.Matrix(i.WIDTH,i.HEIGHT),this.matrix.grid.push(new Array(i.WIDTH)),this.matrix.grid[this.matrix.grid.length-1].fill(1)}return t.prototype.draw=function(t){this.matrix.grid.forEach(function(e,r){e.forEach(function(e,n){e&&(t.fillStyle=a[e],t.fillRect(n,r,1,1))})})},t.prototype.coalesced=function(t){return this.matrix.coalesced(t.matrix,t.x,t.y+1)},t.prototype.merge=function(t){this.matrix.merge(t.matrix,t.x,t.y)},t}();e.Area=c},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=r(9),i=r(8),o=r(0),a=new i.ShapeFactory,c=function(){function t(){var t=this;this.prevTime=0,this.dropCounter=0,this.dropInterval=1e3,this.manipulator=o.Manipulator.getInstance(),this.area=new n.Area,this.currentShape=a.createTShape(),this.nextShape=a.createRandomShape(),this.manipulator.addEventListener("left",function(e){t.area.matrix.coalesced(t.currentShape.matrix,t.currentShape.x-1,t.currentShape.y)||(t.currentShape.x-=1)}),this.manipulator.addEventListener("right",function(e){t.area.matrix.coalesced(t.currentShape.matrix,t.currentShape.x+1,t.currentShape.y)||(t.currentShape.x+=1)}),this.manipulator.addEventListener("down",function(e){t.isColision(function(){return t.merge()}),t.currentShape.y+=1,t.dropCounter=0}),this.manipulator.addEventListener("rotate",function(e){t.currentShape.matrix.rotate(e),t.area.matrix.coalesced(t.currentShape.matrix,t.currentShape.x,t.currentShape.y)&&t.currentShape.matrix.rotate(-e)})}return t.prototype.isColision=function(t,e){var r=this.area.coalesced(this.currentShape),n=r?t:e;return n&&n(),r},t.prototype.merge=function(){this.area.merge(this.currentShape),this.currentShape=this.nextShape,this.nextShape=a.createRandomShape()},t.prototype.draw=function(t,e){var r=this,n=e-this.prevTime;this.prevTime=e,this.dropCounter+=n,this.dropCounter>this.dropInterval&&this.isColision(function(){r.merge()},function(){r.currentShape.y++,r.dropCounter=0}),this.area.draw(t),this.currentShape.draw(t)},t}();e.GamePlay=c},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=r(10);e.GamePlay=n.GamePlay;var i=r(5);e.GameMenu=i.GameMenu},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=r(11),i=r(4),o=r(0);document.addEventListener("DOMContentLoaded",function(){var t=i.Scene.getInstance(),e=(o.Manipulator.getInstance(),new n.GamePlay);t.append(e),t.loop()})}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.ts");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./src/Colors.ts":
+/*!***********************!*\
+  !*** ./src/Colors.ts ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar Colors = /** @class */ (function () {\n    function Colors() {\n        this.default = \"black\";\n        this.colors = [\n            null,\n            \"red\",\n            \"purple\",\n            \"green\",\n            \"blue\",\n        ];\n    }\n    Colors.getInstance = function () {\n        if (!this.instance) {\n            this.instance = new Colors();\n        }\n        return this.instance;\n    };\n    Colors.prototype.getColor = function (color) {\n        var resultColor = this.colors[color];\n        return resultColor ? resultColor : this.default;\n    };\n    Colors.prototype.getColorIndex = function (color) {\n        return this.colors.indexOf(color.toLowerCase());\n    };\n    return Colors;\n}());\nexports.Colors = Colors;\n\n\n//# sourceURL=webpack:///./src/Colors.ts?");
+
+/***/ }),
+
+/***/ "./src/Game/GameMenu.ts":
+/*!******************************!*\
+  !*** ./src/Game/GameMenu.ts ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar GameMenu = /** @class */ (function () {\n    function GameMenu() {\n    }\n    GameMenu.prototype.draw = function (ctx) {\n        ctx.fillRect(0, 0, 100, 100);\n    };\n    return GameMenu;\n}());\nexports.GameMenu = GameMenu;\n\n\n//# sourceURL=webpack:///./src/Game/GameMenu.ts?");
+
+/***/ }),
+
+/***/ "./src/Game/GamePlay/Area.ts":
+/*!***********************************!*\
+  !*** ./src/Game/GamePlay/Area.ts ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nvar __importStar = (this && this.__importStar) || function (mod) {\n    if (mod && mod.__esModule) return mod;\n    var result = {};\n    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];\n    result[\"default\"] = mod;\n    return result;\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar CONFIG = __importStar(__webpack_require__(/*! ../../config */ \"./src/config.ts\"));\nvar Matrix_1 = __webpack_require__(/*! ../../Matrix */ \"./src/Matrix.ts\");\nvar Colors_1 = __webpack_require__(/*! ../../Colors */ \"./src/Colors.ts\");\nvar Area = /** @class */ (function () {\n    function Area() {\n        this.colors = Colors_1.Colors.getInstance();\n        this.matrix = new Matrix_1.Matrix(CONFIG.WIDTH, CONFIG.HEIGHT);\n        this.matrix.grid.push(new Array(CONFIG.WIDTH));\n        this.matrix.grid[this.matrix.grid.length - 1].fill(1);\n    }\n    Area.prototype.draw = function (ctx) {\n        var _this = this;\n        this.matrix.grid.forEach(function (row, rowIndex) {\n            row.forEach(function (item, itemIndex) {\n                if (item) {\n                    ctx.fillStyle = _this.colors.getColor(item);\n                    ctx.fillRect(itemIndex, rowIndex, 1, 1);\n                }\n            });\n        });\n    };\n    Area.prototype.coalesced = function (shape) {\n        return this.matrix.coalesced(shape.matrix, shape.x, shape.y + 1);\n    };\n    Area.prototype.merge = function (shape) {\n        this.matrix.merge(shape.matrix, shape.x, shape.y);\n    };\n    return Area;\n}());\nexports.Area = Area;\n\n\n//# sourceURL=webpack:///./src/Game/GamePlay/Area.ts?");
+
+/***/ }),
+
+/***/ "./src/Game/GamePlay/Shapes/AbstractShape.ts":
+/*!***************************************************!*\
+  !*** ./src/Game/GamePlay/Shapes/AbstractShape.ts ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar Colors_1 = __webpack_require__(/*! ../../../Colors */ \"./src/Colors.ts\");\nvar AbstractShape = /** @class */ (function () {\n    function AbstractShape(color, x, y, width, height, grid) {\n        this.colors = Colors_1.Colors.getInstance();\n        this.x = x;\n        this.y = y;\n        this.width = width;\n        this.height = height;\n        this.matrix = grid;\n    }\n    AbstractShape.prototype.draw = function (ctx) {\n        var _this = this;\n        this.matrix.grid.forEach(function (row, rowIndex) {\n            row.forEach(function (item, itemIndex) {\n                if (item) {\n                    ctx.fillStyle = _this.colors.getColor(item);\n                    ctx.fillRect(_this.x + itemIndex, _this.y + rowIndex, 1, 1);\n                }\n            });\n        });\n    };\n    AbstractShape.prototype.set = function (grid) {\n        var _this = this;\n        this.matrix.grid = grid;\n        grid.forEach(function (row) {\n            row.forEach(function (cell, index, arr) {\n                if (arr[index]) {\n                    arr[index] = _this.color;\n                }\n            });\n        });\n    };\n    return AbstractShape;\n}());\nexports.AbstractShape = AbstractShape;\n\n\n//# sourceURL=webpack:///./src/Game/GamePlay/Shapes/AbstractShape.ts?");
+
+/***/ }),
+
+/***/ "./src/Game/GamePlay/Shapes/BasicShape.ts":
+/*!************************************************!*\
+  !*** ./src/Game/GamePlay/Shapes/BasicShape.ts ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nvar __extends = (this && this.__extends) || (function () {\n    var extendStatics = Object.setPrototypeOf ||\n        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||\n        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };\n    return function (d, b) {\n        extendStatics(d, b);\n        function __() { this.constructor = d; }\n        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());\n    };\n})();\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar AbstractShape_1 = __webpack_require__(/*! ./AbstractShape */ \"./src/Game/GamePlay/Shapes/AbstractShape.ts\");\nvar BasicShape = /** @class */ (function (_super) {\n    __extends(BasicShape, _super);\n    function BasicShape(color, x, y, width, height, grid) {\n        return _super.call(this, color, x, y, width, height, grid) || this;\n    }\n    return BasicShape;\n}(AbstractShape_1.AbstractShape));\nexports.BasicShape = BasicShape;\n\n\n//# sourceURL=webpack:///./src/Game/GamePlay/Shapes/BasicShape.ts?");
+
+/***/ }),
+
+/***/ "./src/Game/GamePlay/Shapes/ShapeBuilder.ts":
+/*!**************************************************!*\
+  !*** ./src/Game/GamePlay/Shapes/ShapeBuilder.ts ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar BasicShape_1 = __webpack_require__(/*! ./BasicShape */ \"./src/Game/GamePlay/Shapes/BasicShape.ts\");\nvar Matrix_1 = __webpack_require__(/*! ../../../Matrix */ \"./src/Matrix.ts\");\nvar Colors_1 = __webpack_require__(/*! ../../../Colors */ \"./src/Colors.ts\");\nvar ShapeBuilder = /** @class */ (function () {\n    function ShapeBuilder() {\n        this.shapeParams = this.reset();\n        this.colors = Colors_1.Colors.getInstance();\n    }\n    ShapeBuilder.prototype.reset = function () {\n        return this.shapeParams = {\n            color: \"white\",\n            x: 0,\n            y: 0,\n            rows: []\n        };\n    };\n    ShapeBuilder.prototype.setColor = function (color) {\n        this.shapeParams.color = color;\n        return this;\n    };\n    ShapeBuilder.prototype.setX = function (x) {\n        this.shapeParams.x = x;\n        return this;\n    };\n    ShapeBuilder.prototype.setY = function (y) {\n        this.shapeParams.y = y;\n        return this;\n    };\n    ShapeBuilder.prototype.addRow = function (row) {\n        this.shapeParams.rows.push(row);\n        return this;\n    };\n    ShapeBuilder.prototype.getResult = function () {\n        var _this = this;\n        var rows = this.shapeParams.rows;\n        rows.forEach(function (row) {\n            row.forEach(function (cell, colIndex) {\n                row[colIndex] = row[colIndex] ? _this.colors.getColorIndex(_this.shapeParams.color) : row[colIndex];\n            });\n        });\n        var eqMatrixSize = rows.length;\n        rows.forEach(function (row) {\n            if (row.length > eqMatrixSize) {\n                eqMatrixSize = row.length;\n            }\n        });\n        while (rows.length < eqMatrixSize) {\n            var row = new Array(eqMatrixSize);\n            row.fill(0);\n            rows.push(row);\n        }\n        var grid = new Matrix_1.Matrix(eqMatrixSize, eqMatrixSize, rows);\n        var result = new BasicShape_1.BasicShape(this.shapeParams.color, this.shapeParams.x, this.shapeParams.y, eqMatrixSize, eqMatrixSize, grid);\n        this.reset();\n        return result;\n    };\n    return ShapeBuilder;\n}());\nexports.ShapeBuilder = ShapeBuilder;\n\n\n//# sourceURL=webpack:///./src/Game/GamePlay/Shapes/ShapeBuilder.ts?");
+
+/***/ }),
+
+/***/ "./src/Game/GamePlay/Shapes/index.ts":
+/*!*******************************************!*\
+  !*** ./src/Game/GamePlay/Shapes/index.ts ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n// import { TShape } from './TShape';\n// import { OShape } from './OShape';\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar ShapeBuilder_1 = __webpack_require__(/*! ./ShapeBuilder */ \"./src/Game/GamePlay/Shapes/ShapeBuilder.ts\");\nvar ShapeFactory = /** @class */ (function () {\n    function ShapeFactory() {\n        this.shapeBuilder = new ShapeBuilder_1.ShapeBuilder();\n    }\n    ShapeFactory.prototype.createRandomShape = function () {\n        var shapes = [\n            this.createTShape,\n            this.createOShape,\n            this.createSShape,\n            this.createZShape,\n        ];\n        var createShape = shapes[(Math.random() * shapes.length) | 0];\n        return createShape.call(this);\n    };\n    ShapeFactory.prototype.createOShape = function () {\n        var shape = this.shapeBuilder\n            .setColor(\"purple\")\n            .addRow([1, 1])\n            .addRow([1, 1])\n            .getResult();\n        return shape;\n    };\n    ShapeFactory.prototype.createTShape = function () {\n        var shape = this.shapeBuilder\n            .setColor(\"green\")\n            .addRow([1, 1, 1])\n            .addRow([0, 1, 0])\n            .getResult();\n        return shape;\n    };\n    ShapeFactory.prototype.createSShape = function () {\n        var shape = this.shapeBuilder\n            .setColor(\"blue\")\n            .addRow([0, 1, 1])\n            .addRow([1, 1, 0])\n            .getResult();\n        return shape;\n    };\n    ShapeFactory.prototype.createZShape = function () {\n        var shape = this.shapeBuilder\n            .setColor(\"red\")\n            .addRow([1, 1, 0])\n            .addRow([0, 1, 1])\n            .getResult();\n        return shape;\n    };\n    return ShapeFactory;\n}());\nexports.ShapeFactory = ShapeFactory;\n\n\n//# sourceURL=webpack:///./src/Game/GamePlay/Shapes/index.ts?");
+
+/***/ }),
+
+/***/ "./src/Game/GamePlay/index.ts":
+/*!************************************!*\
+  !*** ./src/Game/GamePlay/index.ts ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar Area_1 = __webpack_require__(/*! ./Area */ \"./src/Game/GamePlay/Area.ts\");\nvar Shapes_1 = __webpack_require__(/*! ./Shapes/ */ \"./src/Game/GamePlay/Shapes/index.ts\");\nvar Manipulator_1 = __webpack_require__(/*! ../../Manipulator */ \"./src/Manipulator.ts\");\nvar shapeFactory = new Shapes_1.ShapeFactory();\nvar GamePlay = /** @class */ (function () {\n    function GamePlay() {\n        var _this = this;\n        this.prevTime = 0;\n        this.dropCounter = 0;\n        this.dropInterval = 1000;\n        this.manipulator = Manipulator_1.Manipulator.getInstance();\n        this.area = new Area_1.Area();\n        this.currentShape = shapeFactory.createTShape();\n        // this.nextShape = shapeFactory.createTShape();\n        this.nextShape = shapeFactory.createRandomShape();\n        this.manipulator.addEventListener(\"left\", function (e) {\n            if (_this.area.matrix.coalesced(_this.currentShape.matrix, _this.currentShape.x - 1, _this.currentShape.y)) {\n                return;\n            }\n            _this.currentShape.x -= 1;\n        });\n        this.manipulator.addEventListener(\"right\", function (e) {\n            if (_this.area.matrix.coalesced(_this.currentShape.matrix, _this.currentShape.x + 1, _this.currentShape.y)) {\n                return;\n            }\n            _this.currentShape.x += 1;\n        });\n        this.manipulator.addEventListener(\"down\", function (e) {\n            _this.isColision(function () { return _this.merge(); });\n            _this.currentShape.y += 1;\n            _this.dropCounter = 0;\n        });\n        this.manipulator.addEventListener(\"rotate\", function (e) {\n            _this.currentShape.matrix.rotate(e);\n            if (_this.area.matrix.coalesced(_this.currentShape.matrix, _this.currentShape.x, _this.currentShape.y)) {\n                _this.currentShape.matrix.rotate(-e);\n            }\n        });\n    }\n    GamePlay.prototype.isColision = function (trueHandler, falseHandler) {\n        var result = this.area.coalesced(this.currentShape);\n        var handler = (result ? trueHandler : falseHandler);\n        handler && handler();\n        return result;\n    };\n    GamePlay.prototype.merge = function () {\n        this.area.merge(this.currentShape);\n        this.currentShape = this.nextShape;\n        // this.nextShape = shapeFactory.createTShape();\n        this.nextShape = shapeFactory.createRandomShape();\n    };\n    GamePlay.prototype.draw = function (ctx, time) {\n        var _this = this;\n        var deltaTime = time - this.prevTime;\n        this.prevTime = time;\n        this.dropCounter += deltaTime;\n        if (this.dropCounter > this.dropInterval) {\n            this.isColision(function () {\n                _this.merge();\n            }, function () {\n                _this.currentShape.y++;\n                _this.dropCounter = 0;\n            });\n        }\n        this.area.draw(ctx);\n        this.currentShape.draw(ctx);\n    };\n    return GamePlay;\n}());\nexports.GamePlay = GamePlay;\n\n\n//# sourceURL=webpack:///./src/Game/GamePlay/index.ts?");
+
+/***/ }),
+
+/***/ "./src/Game/index.ts":
+/*!***************************!*\
+  !*** ./src/Game/index.ts ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar GamePlay_1 = __webpack_require__(/*! ./GamePlay */ \"./src/Game/GamePlay/index.ts\");\nexports.GamePlay = GamePlay_1.GamePlay;\nvar GameMenu_1 = __webpack_require__(/*! ./GameMenu */ \"./src/Game/GameMenu.ts\");\nexports.GameMenu = GameMenu_1.GameMenu;\n\n\n//# sourceURL=webpack:///./src/Game/index.ts?");
+
+/***/ }),
+
+/***/ "./src/Manipulator.ts":
+/*!****************************!*\
+  !*** ./src/Manipulator.ts ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar Manipulator = /** @class */ (function () {\n    function Manipulator() {\n        var _this = this;\n        this.handlers = {};\n        document.addEventListener(\"keydown\", function (e) {\n            if (e.keyCode === 65) {\n                _this.dispatchEvent(\"left\", 1);\n            }\n            else if (e.keyCode === 68) {\n                _this.dispatchEvent(\"right\", 1);\n            }\n            else if (e.keyCode === 87) {\n                _this.dispatchEvent(\"up\", 1);\n            }\n            else if (e.keyCode === 83) {\n                _this.dispatchEvent(\"down\", 1);\n            }\n            else if (e.keyCode === 81) {\n                _this.dispatchEvent(\"rotate\", -1);\n            }\n            else if (e.keyCode === 69) {\n                _this.dispatchEvent(\"rotate\", 1);\n            }\n        });\n    }\n    Manipulator.getInstance = function () {\n        if (!this.instance) {\n            this.instance = new Manipulator();\n        }\n        return this.instance;\n    };\n    Manipulator.prototype.addEventListener = function (type, handler) {\n        if (!this.handlers[type]) {\n            this.handlers[type] = [];\n        }\n        this.handlers[type].push(handler);\n    };\n    Manipulator.prototype.dispatchEvent = function (type, data) {\n        console.log(type, data);\n        if (this.handlers[type]) {\n            this.handlers[type].forEach(function (handler) { return handler(data); });\n        }\n    };\n    return Manipulator;\n}());\nexports.Manipulator = Manipulator;\n\n\n//# sourceURL=webpack:///./src/Manipulator.ts?");
+
+/***/ }),
+
+/***/ "./src/Matrix.ts":
+/*!***********************!*\
+  !*** ./src/Matrix.ts ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar Matrix = /** @class */ (function () {\n    function Matrix(width, height, fill) {\n        this.width = width;\n        this.height = height;\n        this.grid = [];\n        this.fillGrid(fill);\n    }\n    Matrix.prototype.fillGrid = function (fill) {\n        for (var y = 0; y < this.height; y++) {\n            var row = new Array(this.width);\n            if (fill) {\n                this.grid.push(fill[y]);\n            }\n            else {\n                row.fill(0);\n                this.grid.push(row);\n            }\n        }\n    };\n    Matrix.prototype.coalesced = function (to, xOffset, yOffset) {\n        for (var y = 0; y < to.grid.length; y++) {\n            for (var x = 0; x < to.grid[y].length; x++) {\n                if (to.grid[y][x] && this.grid[yOffset + y][xOffset + x]) {\n                    return true;\n                }\n            }\n        }\n        return false;\n    };\n    Matrix.prototype.merge = function (to, xOffset, yOffset) {\n        for (var y = 0; y < to.grid.length; y++) {\n            for (var x = 0; x < to.grid[y].length; x++) {\n                if (to.grid[y][x]) {\n                    this.grid[yOffset + y][xOffset + x] = to.grid[y][x];\n                }\n            }\n        }\n    };\n    Matrix.prototype.rotate = function (direction) {\n        var _a;\n        for (var y = 0; y < this.grid.length; y++) {\n            for (var x = 0; x < y; x++) {\n                _a = [\n                    this.grid[y][x],\n                    this.grid[x][y]\n                ], this.grid[x][y] = _a[0], this.grid[y][x] = _a[1];\n            }\n        }\n        if (direction > 0) {\n            this.grid.forEach(function (row) { return row.reverse(); });\n        }\n        else {\n            this.grid.reverse();\n        }\n    };\n    return Matrix;\n}());\nexports.Matrix = Matrix;\n\n\n//# sourceURL=webpack:///./src/Matrix.ts?");
+
+/***/ }),
+
+/***/ "./src/Scene.ts":
+/*!**********************!*\
+  !*** ./src/Scene.ts ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nvar __importStar = (this && this.__importStar) || function (mod) {\n    if (mod && mod.__esModule) return mod;\n    var result = {};\n    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];\n    result[\"default\"] = mod;\n    return result;\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar CONFIG = __importStar(__webpack_require__(/*! ./config */ \"./src/config.ts\"));\nvar Scene = /** @class */ (function () {\n    function Scene() {\n        this.layers = [];\n        this.animationLoop = AnimationLoop.getInstance();\n        this.animationLoop.appendAction(this.draw.bind(this));\n        this.canvas = document.createElement(\"canvas\");\n        this.ctx = this.canvas.getContext(\"2d\");\n        document.body.appendChild(this.canvas);\n        this.canvas.width = CONFIG.WIDTH * CONFIG.PIXEL_SIZE;\n        this.canvas.height = CONFIG.HEIGHT * CONFIG.PIXEL_SIZE;\n        this.canvas.style.backgroundColor = CONFIG.BACKGROUND_COLOR;\n        this.canvas.style.height = CONFIG.HEIGHT * CONFIG.PIXEL_SIZE + \"px\";\n        this.canvas.style.width = CONFIG.WIDTH * CONFIG.PIXEL_SIZE + \"px\";\n        this.ctx.scale(CONFIG.PIXEL_SIZE, CONFIG.PIXEL_SIZE);\n        this.ctx.fillStyle = CONFIG.SHAPE_COLOR;\n        window.CTX = this.ctx;\n    }\n    Scene.prototype.append = function (drawable) {\n        this.layers.push(drawable);\n    };\n    Scene.prototype.draw = function (time) {\n        var _this = this;\n        this.ctx.clearRect(0, 0, CONFIG.WIDTH, CONFIG.HEIGHT);\n        this.layers.forEach(function (drawable) {\n            drawable.draw(_this.ctx, time);\n        });\n    };\n    return Scene;\n}());\nexports.Scene = Scene;\nvar AnimationLoop = /** @class */ (function () {\n    function AnimationLoop() {\n        this.actions = [];\n    }\n    AnimationLoop.getInstance = function () {\n        if (!this.instance) {\n            this.instance = new AnimationLoop();\n            this.instance.loop();\n        }\n        return this.instance;\n    };\n    AnimationLoop.prototype.appendAction = function (action) {\n        this.actions.push(action);\n    };\n    AnimationLoop.prototype.loop = function (time) {\n        if (time === void 0) { time = 0; }\n        this.actions.forEach(function (action) {\n            action(time);\n        });\n        requestAnimationFrame(this.loop.bind(this));\n    };\n    return AnimationLoop;\n}());\nexports.AnimationLoop = AnimationLoop;\n\n\n//# sourceURL=webpack:///./src/Scene.ts?");
+
+/***/ }),
+
+/***/ "./src/config.ts":
+/*!***********************!*\
+  !*** ./src/config.ts ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.WIDTH = 12;\nexports.HEIGHT = 20;\nexports.PIXEL_SIZE = 20;\nexports.BACKGROUND_COLOR = \"#000000\";\nexports.SHAPE_COLOR = \"#FF00FF\";\n\n\n//# sourceURL=webpack:///./src/config.ts?");
+
+/***/ }),
+
+/***/ "./src/index.ts":
+/*!**********************!*\
+  !*** ./src/index.ts ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\n// import { GameSingletone } from './Game/';\nvar Game_1 = __webpack_require__(/*! ./Game/ */ \"./src/Game/index.ts\");\nvar Scene_1 = __webpack_require__(/*! ./Scene */ \"./src/Scene.ts\");\nvar Manipulator_1 = __webpack_require__(/*! ./Manipulator */ \"./src/Manipulator.ts\");\ndocument.addEventListener(\"DOMContentLoaded\", function () {\n    var scene = new Scene_1.Scene();\n    var game = new Game_1.GamePlay();\n    var manipulator = Manipulator_1.Manipulator.getInstance();\n    scene.append(game);\n});\n\n\n//# sourceURL=webpack:///./src/index.ts?");
+
+/***/ })
+
+/******/ });
