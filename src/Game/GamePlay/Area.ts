@@ -28,10 +28,15 @@ export class Area {
 	}
 
 	coalesced(shape: AbstractShape): boolean {
-		return this.matrix.coalesced(shape.matrix, shape.x, shape.y + 1);
+		const coalesced = this.matrix.coalesced(shape.matrix, shape.x, shape.y + 1);
+		return coalesced;
 	}
 
 	merge(shape: AbstractShape): void {
 		this.matrix.merge(shape.matrix, shape.x, shape.y);
+	}
+
+	clear() {
+		this.matrix.clear();
 	}
 }

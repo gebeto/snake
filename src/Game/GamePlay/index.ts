@@ -56,7 +56,11 @@ export class GamePlay implements Drawable {
 	}
 
 	isColision(trueHandler?: () => void, falseHandler?: () => void) {
-		const result = this.area.coalesced(this.currentShape);
+		let result = this.area.coalesced(this.currentShape);
+		if (result && (this.currentShape.y === 1 || this.currentShape.y === 0)) {
+			this.area.matrix.clear();
+			result = false;
+		}
 		const handler = (result ? trueHandler : falseHandler);
 		handler && handler();
 		return result;

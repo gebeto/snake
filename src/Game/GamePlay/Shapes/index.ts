@@ -44,6 +44,8 @@ export class ShapeFactory {
 			.setColor("blue")
 			.addRow([0, 1, 1])
 			.addRow([1, 1, 0])
+			.addRow([1, 1, 0])
+			.addRow([1, 1, 0])
 			.getResult();
 		return shape;
 	}
