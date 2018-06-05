@@ -1,7 +1,5 @@
-// import { TShape } from './TShape';
-// import { OShape } from './OShape';
-
 import { ShapeBuilder } from './ShapeBuilder';
+
 
 export class ShapeFactory {
 	shapeBuilder: ShapeBuilder;
@@ -43,8 +41,6 @@ export class ShapeFactory {
 		const shape = this.shapeBuilder
 			.setColor("blue")
 			.addRow([0, 1, 1])
-			.addRow([1, 1, 0])
-			.addRow([1, 1, 0])
 			.addRow([1, 1, 0])
 			.getResult();
 		return shape;

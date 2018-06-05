@@ -1,18 +1,17 @@
-import { Drawable } from '../../interfaces';
+import { Drawable } from '../../Scene';
 
 import { Area } from './Area';
-import { AbstractShape } from './Shapes/AbstractShape';
+import { BasicShape } from './Shapes/BasicShape';
 import { ShapeFactory } from './Shapes/';
-import { Manipulator } from '../../Manipulator';
-
+import { Manipulator } from '../Manipulator';
 
 const shapeFactory = new ShapeFactory();
 
 
 export class GamePlay implements Drawable {
 	area: Area;
-	currentShape: AbstractShape;
-	nextShape: AbstractShape;
+	currentShape: BasicShape;
+	nextShape: BasicShape;
 	manipulator: Manipulator;
 
 	prevTime: number;
@@ -58,7 +57,7 @@ export class GamePlay implements Drawable {
 	isColision(trueHandler?: () => void, falseHandler?: () => void) {
 		let result = this.area.coalesced(this.currentShape);
 		if (result && (this.currentShape.y === 1 || this.currentShape.y === 0)) {
-			this.area.matrix.clear();
+			this.area.clear();
 			result = false;
 		}
 		const handler = (result ? trueHandler : falseHandler);
@@ -69,7 +68,6 @@ export class GamePlay implements Drawable {
 	merge() {
 		this.area.merge(this.currentShape)
 		this.currentShape = this.nextShape;
-		// this.nextShape = shapeFactory.createTShape();
 		this.nextShape = shapeFactory.createRandomShape();
 	}
 
@@ -90,4 +88,5 @@ export class GamePlay implements Drawable {
 		this.area.draw(ctx);
 		this.currentShape.draw(ctx);
 	}
+
 }

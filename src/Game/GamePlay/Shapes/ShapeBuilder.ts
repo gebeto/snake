@@ -1,6 +1,7 @@
 import { BasicShape } from './BasicShape';
-import { Matrix } from '../../../Matrix';
-import { Colors } from '../../../Colors';
+import { Matrix } from '../../Matrix';
+import { Colors } from '../Colors';
+
 
 export interface ShapeParams {
 	rows: number[][];
@@ -8,6 +9,7 @@ export interface ShapeParams {
 	x: number;
 	y: number;
 }
+
 
 export class ShapeBuilder {
 	shapeParams: ShapeParams;

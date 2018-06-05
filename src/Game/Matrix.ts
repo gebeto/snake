@@ -69,6 +69,5 @@ export class Matrix {
  		this.grid.map(row => {
  			row.fill(0);
  		});
- 		this.grid[this.grid.length - 1].fill(1);
  	}
 }
